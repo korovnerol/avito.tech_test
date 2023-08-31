@@ -31,6 +31,7 @@ func main() {
 }
 
 func infoUser(w http.ResponseWriter, r *http.Request) {
+	var result string
 	params := mux.Vars(r)
 	id := params["id"]
 	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=users sslmode=disable", host, port, user, password)
@@ -43,7 +44,8 @@ func infoUser(w http.ResponseWriter, r *http.Request) {
 
 	// Получаем данные
 	res := db.QueryRow("SELECT segments FROM users WHERE id=?", id)
-	fmt.Fprintf(w, (*res).segments)
+	res.Scan(result)
+	fmt.Fprintf(w, result)
 	// Информация о сегментах пользователя
 }
 
